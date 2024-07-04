@@ -1,0 +1,45 @@
+---
+title: "Workflow Basics"
+author: "Rodolfo León"
+format: html
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+library(ggthemes)
+```
+
+```{r}
+#| echo: false
+
+```
+
+```{r}
+libary(todyverse)
+
+ggplot(dTA = mpg) + 
+  geom_point(maping = aes(x = displ y = hwy)) +
+  geom_smooth(method = "lm)
+```
+
+```{r}
+library(tidyverse)
+
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+my_bar_plot <- ggplot(mpg, aes(x = class)) +
+  geom_bar()
+my_scatter_plot <- ggplot(mpg, aes(x = cty, y = hwy)) +
+  geom_point()
+ggsave(filename = "mpg-plot.png", plot = my_bar_plot)
+```

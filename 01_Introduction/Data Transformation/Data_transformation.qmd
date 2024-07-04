@@ -1,0 +1,66 @@
+---
+title: "Quarto Template"
+author: "Rodolfo León"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+library(ggthemes)
+```
+
+```{r}
+#| echo: false
+
+```
+
+```{r}
+library(nycflights13)
+```
+
+```{r}
+View(flights)
+```
+
+```{r}
+# Flights with a given destination
+flights |>
+  filter(dest == "IAH") |> 
+  group_by(year, month, day) |> 
+  summarize(
+    arr_delay = mean(arr_delay, na.rm = TRUE)
+  )
+```
+
+```{r}
+# Filtering rows
+flights %>% filter(dep_delay > 120)
+```
+
+```{r}
+# Flights that departed on January 1
+flights |> 
+  filter(month == 1 & day == 1)
+
+```
+
+```{r}
+# Flights that departed in January or February
+flights |> 
+  filter(month == 1 | month == 2)
+
+```
+
+```{r}
+# A shorter way to select flights that departed in January or February
+flights |> 
+  filter(month %in% c(1, 2))
+```
