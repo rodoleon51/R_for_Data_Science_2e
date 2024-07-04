@@ -1,0 +1,77 @@
+---
+title: "penguins"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+library(ggthemes)
+```
+
+You can add options to executable code like this
+
+```{r}
+penguins
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r}
+ggplot(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)
+    
+    )+
+  geom_point()
+```
+
+```{r}
+ggplot(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)
+    
+    )+
+  geom_point() + 
+  geom_smooth(method = "lm")
+```
+
+```{r}
+ggplot(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+    ) +
+  geom_point(mapping = aes(color = species)) + 
+  geom_smooth(method = "lm")
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(aes(color = species, shape = species)) +
+  geom_smooth(method = "lm") +
+  labs(
+    title = "Body mass and flipper length",
+    subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+    x = "Flipper length (mm)", y = "Body mass (g)",
+    color = "Species", shape = "Species"
+  ) +
+  scale_color_colorblind()
+```

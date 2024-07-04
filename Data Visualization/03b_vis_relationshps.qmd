@@ -1,0 +1,66 @@
+---
+title: "Visualizing Relationships"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+library(ggthemes)
+```
+
+```{r}
+#| echo: false
+```
+
+## Boxplot
+
+```{r}
+p <- ggplot(penguins, aes(x = species, y = body_mass_g))
+p + geom_boxplot()
+```
+
+```{r}
+p <- ggplot(penguins, aes(x = body_mass_g, color = species))
+p + geom_density(linewidth = 0.75)
+```
+
+```{r}
+p <- ggplot(penguins, aes(x = body_mass_g, color = species, fill = species))
+p + geom_density(alpha = 0.5)
+```
+
+```{r}
+p <- ggplot(penguins, aes(x = island, fill = species))
+p + geom_bar()
+```
+
+### Two numerical variables
+
+```{r}
+p <- ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g))
+p + geom_point()
+
+# Scatterplot is the most commonly used
+```
+
+### Three or more numerical variables
+
+```{r}
+p <- ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g))
+p + geom_point(aes(color = species, shape = island))
+
+# Results in hard to read plot. Better use Facets
+```
+
+```{r}
+p <- ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g))
+p + geom_point(aes(color = species, shape = species)) + facet_wrap(~island)
+```
