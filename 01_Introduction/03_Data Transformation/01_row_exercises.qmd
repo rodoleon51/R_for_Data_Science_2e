@@ -11,8 +11,8 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
-library(palmerpenguins)
 library(ggthemes)
+library(nycflights13)
 ```
 
 ```{r}
@@ -24,9 +24,21 @@ library(ggthemes)
 
     -   Had an arrival delay of two or more hours
 
+        ```{r}
+        flights |> filter(arr_delay >= 120
+        ```
+
     -   Flew to Houston (`IAH` or `HOU`)
 
+        ```{r}
+        flights |> filter(dest == "IAH" | "HOU")
+        ```
+
     -   Were operated by United, American, or Delta
+
+        ```{r}
+        flights |>  filter(carrier == "UA" | "AA" | "DL")
+        ```
 
     -   Departed in summer (July, August, and September)
 
@@ -35,12 +47,18 @@ library(ggthemes)
     -   Were delayed by at least an hour, but made up over 30 minutes in flight
 
         ```{r}
+        flights |> filter(arr_delay >= 120 &  & carrier == ("UA" | "AA" | "DL") & month == ( 7 | 8 | 9) & (arr_delay > 120 & dep_delay == 0) & (dep_delay < 60 & arr_delay == -30))
 
         ```
+
+    ```{r}
+
+    ```
 
 2.  Sort `flights` to find the flights with longest departure delays. Find the flights that left earliest in the morning.
 
     ```{r}
+    flights |> dest == "IAH" | "HOU"
 
     ```
 
