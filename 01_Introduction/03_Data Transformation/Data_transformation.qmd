@@ -19,7 +19,7 @@ library(ggthemes)
 
 ```{r}
 #| echo: false
-
+# The echo: false option disables the printing of code (only output is displayed).
 ```
 
 ```{r}
@@ -40,8 +40,10 @@ flights |>
   )
 ```
 
+### Rows - filter()
+
 ```{r}
-# Filtering rows
+# Filtering rows does not affect columns
 flights %>% filter(dep_delay > 120)
 ```
 
@@ -63,4 +65,38 @@ flights |>
 # A shorter way to select flights that departed in January or February
 flights |> 
   filter(month %in% c(1, 2))
+```
+
+### Rows - arrange()
+
+```{r}
+# Sort the order of the rows for the whole dataframe. Use arrange(desc()) for descending order
+flights |> 
+  arrange(year, month, day, dep_time)
+```
+
+### Rows - distinct()
+
+```{r}
+# Remove duplicate rows, if any
+flights |> 
+  distinct()
+```
+
+```{r}
+# Find all unique origin and destination pairs
+flights |> 
+  distinct(origin, dest)
+```
+
+```{r}
+# To the keep other columns when filtering for unique rows, use
+flights |> 
+  distinct(origin, dest, .keep_all = TRUE)
+```
+
+```{r}
+# To find the number of occurrences instead, you’re better off swapping distinct() for count(). Add sort = TRUE to arrange in descending order.
+flights |>
+  count(origin, dest, sort = TRUE)
 ```
