@@ -1,5 +1,5 @@
 ---
-title: "Quarto Template"
+title: "Data Transformation - Rows"
 author: "Rodolfo León"
 format: html
 editor: visual
@@ -11,15 +11,10 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-library(tidyverse)
-library(palmerpenguins)
-library(ggthemes)
-```
-
 ```{r}
 #| echo: false
-# The echo: false option disables the printing of code (only output is displayed).
+library(tidyverse)
+library(ggthemes)
 ```
 
 ```{r}

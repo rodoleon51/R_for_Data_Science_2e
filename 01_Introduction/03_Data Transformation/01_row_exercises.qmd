@@ -3,6 +3,8 @@ title: "Row Exercises"
 author: "Rodolfo León"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -22,66 +24,69 @@ library(nycflights13)
 
 1.  In a single pipeline for each condition, find all flights that meet the condition:
 
-    -   Had an arrival delay of two or more hours
+-   Had an arrival delay of two or more hours
 
-        ```{r}
-        flights |> filter(arr_delay >= 120
-        ```
+```{r}
+flights |> filter(arr_delay >= 120) |> arrange(desc(arr_delay))
+```
 
-    -   Flew to Houston (`IAH` or `HOU`)
+-   Flew to Houston (`IAH` or `HOU`)
 
-        ```{r}
-        flights |> filter(dest == "IAH" | "HOU")
-        ```
+```{r}
+flights |> filter(dest %in% c("IAH", "HOU"))
+```
 
-    -   Were operated by United, American, or Delta
+-   Were operated by United, American, or Delta
 
-        ```{r}
-        flights |>  filter(carrier == "UA" | "AA" | "DL")
-        ```
+```{r}
+flights |>  filter(carrier %in% c("UA", "AA", "DL"))
+```
 
-    -   Departed in summer (July, August, and September)
+-   Departed in summer (July, August, and September)
 
-    -   Arrived more than two hours late, but didn’t leave late
+```{r}
+flights |> filter(month %in% c(7, 8, 9))
+```
 
-    -   Were delayed by at least an hour, but made up over 30 minutes in flight
+-   Arrived more than two hours late, but didn't leave late
 
-        ```{r}
-        flights |> filter(arr_delay >= 120 &  & carrier == ("UA" | "AA" | "DL") & month == ( 7 | 8 | 9) & (arr_delay > 120 & dep_delay == 0) & (dep_delay < 60 & arr_delay == -30))
+```{r}
+flights |> filter(arr_delay >= 120 & dep_delay <= 0) 
+```
 
-        ```
+-   Were delayed by at least an hour, but made up over 30 minutes in flight
 
-    ```{r}
-
-    ```
+```{r}
+flights |> 
+  filter(arr_delay >= 120 & dep_delay <= 0)
+```
 
 2.  Sort `flights` to find the flights with longest departure delays. Find the flights that left earliest in the morning.
 
-    ```{r}
-    flights |> dest == "IAH" | "HOU"
+```{r}
 
-    ```
+```
 
 3.  Sort `flights` to find the fastest flights. (Hint: Try including a math calculation inside of your function.)
 
-    ```{r}
+```{r}
 
-    ```
+```
 
 4.  Was there a flight on every day of 2013?
 
-    ```{r}
+```{r}
 
-    ```
+```
 
 5.  Which flights traveled the farthest distance? Which traveled the least distance?
 
-    ```{r}
+```{r}
 
-    ```
+```
 
-6.  Does it matter what order you used [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) and [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html) if you’re using both? Why/why not? Think about the results and how much work the functions would have to do.
+6.  Does it matter what order you used if you’re using both? Why/why not? Think about the results and how much work the functions would have to do.
 
-    ```{r}
+```{r}
 
-    ```
+```

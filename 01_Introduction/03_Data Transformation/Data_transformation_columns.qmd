@@ -3,19 +3,64 @@ title: "Data Transformation - Columns"
 author: "Rodolfo León"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r}
+#| echo: false
 library(tidyverse)
-library(palmerpenguins)
 library(ggthemes)
 ```
 
+### 1. mutate() - add columns calculated from existing ones
+
 ```{r}
-#| echo: false
+# By default adds the columns at the end of the dataframe
+flights |> 
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed = distance / air_time * 60
+  )
+```
+
+```{r}
+# Use '.before' to add the new columns to the left side
+flights |> 
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed = distance / air_time * 60,
+    .before = 1
+  )
+```
+
+```{r}
+# Use '.before' and '.after' to place the new columns in a desired position
+flights |> 
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed = distance / air_time * 60,
+    .after = day
+  )
+```
+
+```{r}
+# To display only the columns used in the calculation use '.keep = "used"' 
+flights |> 
+  mutate(
+    gain = dep_delay - arr_delay,
+    hours = air_time / 60,
+    gain_per_hour = gain / hours,
+    .keep = "used"
+  )
+```
+
+## 2. select()
+
+```{r}
 
 ```
