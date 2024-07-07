@@ -1,5 +1,5 @@
 ---
-title: "Data Transformation - Columns"
+title: "The pipe"
 author: "Rodolfo León"
 format: html
 editor: visual
@@ -9,15 +9,8 @@ editor: visual
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r}
+#| echo: true
 library(tidyverse)
 library(ggthemes)
-```
-
-```{r}
-#| echo: false
-```
-
-```{r}
-
 ```
