@@ -3,6 +3,8 @@ title: "The pipe"
 author: "Rodolfo León"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -13,4 +15,15 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 #| echo: true
 library(tidyverse)
 library(ggthemes)
+library(nycflights13)
+```
+
+#### Find the fastest flights to Houston’s IAH airport:
+
+```{r}
+flights |> 
+  filter(dest == "IAH") |> 
+  mutate(speed = distance / air_time * 60) |> 
+  select(year:day, dep_time, carrier, flight, speed) |> 
+  arrange(desc(speed))
 ```

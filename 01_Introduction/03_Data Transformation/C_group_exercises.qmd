@@ -1,0 +1,119 @@
+---
+title: "group() exercises"
+author: "Rodolfo León"
+format: html
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(ggthemes)
+library(nycflights13)
+```
+
+1.  Which carrier has the worst average delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about `flights |> group_by(carrier, dest) |> summarize(n())`)
+
+    ```{r}
+    flights |>
+      group_by(carrier) |>
+      summarize(avg_dep_delay = mean(dep_delay, na.rm = TRUE)) |>
+      arrange(desc(avg_dep_delay))
+    ```
+
+2.  Find the flights that are most delayed upon departure from each destination.
+
+    ```{r}
+    flights |> 
+      group_by(dest) |> 
+      arrange(dest, desc(dep_delay)) |>
+      slice_head(n = 5) |>
+      relocate(dest, dep_delay)
+    ```
+
+3.  How do delays vary over the course of the day. Illustrate your answer with a plot.
+
+    ```{r}
+    flights |>
+      group_by(hour) |>
+      summarize(avg_dep_delay = mean(dep_delay, na.rm = TRUE)) |>
+      ggplot(aes(x = hour, y = avg_dep_delay)) + 
+      geom_smooth()
+    ```
+
+4.  What happens if you supply a negative `n` to [`slice_min()`](https://dplyr.tidyverse.org/reference/slice.html) and friends?
+
+    ```{r}
+    flights |> 
+      slice_min(dep_delay, n = -5) |>
+      relocate(dep_delay)
+    ```
+
+    ```{r}
+    flights |> 
+      slice_min(dep_delay, n = 5) |>
+      relocate(dep_delay)
+    ```
+
+    ```{r}
+    flights |> 
+      slice_max(dep_delay, n = -5) |>
+      relocate(dep_delay)
+    ```
+
+    ```{r}
+    flights |> 
+      slice_max(dep_delay, n = 5) |>
+      relocate(dep_delay)
+    ```
+
+5.  Explain what [`count()`](https://dplyr.tidyverse.org/reference/count.html) does in terms of the dplyr verbs you just learned. What does the `sort` argument to [`count()`](https://dplyr.tidyverse.org/reference/count.html) do?
+
+    *counts the number of observations in each group, setting the `sort` argument to `TRUE` arranges the categories in descending order of number of observations.*
+
+6.  Suppose we have the following tiny data frame:
+
+    ```{r}
+    df <- tibble(x = 1:5,   y = c("a", "b", "a", "a", "b"),   z = c("K", "K", "L", "L", "K") )
+    print(df)
+    ```
+
+    a.  Write down what you think the output will look like, then check if you were correct, and describe what [`group_by()`](https://dplyr.tidyverse.org/reference/group_by.html) does.
+
+    ```{r}
+    df |> group_by(y)
+    ```
+
+    b.  Write down what you think the output will look like, then check if you were correct, and describe what [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html) does. Also comment on how it’s different from the [`group_by()`](https://dplyr.tidyverse.org/reference/group_by.html) in part (a).
+
+    ```{r}
+    df |> arrange(y)
+    ```
+
+    c.  Write down what you think the output will look like, then check if you were correct, and describe what the pipeline does.
+
+    ```{r}
+    df |>   group_by(y) |> summarize(mean_x = mean(x))
+    ```
+
+    d.  Write down what you think the output will look like, then check if you were correct, and describe what the pipeline does. Then, comment on what the message says.
+
+    ```{r}
+    df |>   group_by(y, z) |>   summarize(mean_x = mean(x))
+    ```
+
+    e.  Write down what you think the output will look like, then check if you were correct, and describe what the pipeline does. How is the output different from the one in part (d)?
+
+    ```{r}
+    df |>   group_by(y, z) |>   summarize(mean_x = mean(x), .groups = "drop")
+    ```
+
+    f.  Write down what you think the outputs will look like, then check if you were correct, and describe what each pipeline does. How are the outputs of the two pipelines different?
+
+    ```{r}
+    df |>   group_by(y, z) |>   summarize(mean_x = mean(x))  df |>   group_by(y, z) |>   mutate(mean_x = mean(x))
+    ```
