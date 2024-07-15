@@ -1,0 +1,113 @@
+---
+title: "Data tidying"
+author: "Rodolfo León"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(ggthemes)
+library(nycflights13)
+```
+
+## pivot_longer()
+
+```{r}
+df <- tribble(
+  ~id,  ~bp1, ~bp2,
+   "A",  100,  120,
+   "B",  140,  115,
+   "C",  120,  125
+)
+```
+
+```{r}
+df |> 
+  pivot_longer(
+    cols = bp1:bp2,
+    names_to = "measurement",
+    values_to = "value"
+  )
+```
+
+```{r}
+household <- tribble(
+~family, ~dob_child1, ~dob_child2, ~name_child1, ~name_child2,
+'1', 1998-11-26, 2000-01-29, 'Susan',       'Jose',       
+'2', 1996-06-22, NA,         'Mark',        NA,       
+'3', 2002-07-11, 2004-04-05, 'Sam',         'Seth',       
+'4', 2004-10-10, 2009-08-27, 'Craig',       'Khai',       
+'5', 2000-12-05, 2005-02-28, 'Parker',      'Gracie'
+)
+
+household
+```
+
+```{r}
+household |> 
+  pivot_longer(
+    cols = !family, 
+    names_to = c(".value", "child"), 
+    names_sep = "_", 
+    values_drop_na = TRUE
+  )
+
+```
+
+## pivot_wider()
+
+```{r}
+df <- tribble(
+  ~id, ~measurement, ~value,
+  "A",        "bp1",    100,
+  "B",        "bp1",    140,
+  "B",        "bp2",    115, 
+  "A",        "bp2",    120,
+  "A",        "bp3",    105
+)
+```
+
+```{r}
+df |> 
+  pivot_wider(
+    names_from = measurement,
+    values_from = value
+  )
+```
+
+## Multiple rows input to one cell in output
+
+```{r}
+df <- tribblele(
+  ~id, ~measurement, ~value,
+  "A",        "bp1",    100,
+  "A",        "bp1",    102,
+  "A",        "bp2",    120,
+  "B",        "bp1",    140, 
+  "B",        "bp2",    115
+)
+```
+
+```{r}
+df |>
+  pivot_wider(
+    names_from = measurement,
+    values_from = value
+  )
+
+```
+
+```{r}
+df |> 
+  group_by(id, measurement) |> 
+  summarize(n = n(), .groups = "drop") |> 
+  filter(n > 1)   
+```

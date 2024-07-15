@@ -1,5 +1,5 @@
 ---
-title: "Quora template"
+title: "Quarto template"
 author: "Rodolfo León"
 format: html
 editor: visual
