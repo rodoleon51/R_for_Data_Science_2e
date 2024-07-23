@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 ```{r}
 #| echo: false
-library(tidyverse)
+suppressPackageStartupMessages(library(tidyverse))
 library(ggthemes)
 
 ```
@@ -66,30 +66,32 @@ students
 
     ```{r}
     readr::read_csv("a,b\n1,2,3\n4,5,6")
-
+    # 2 columns and 3 values. Last 2 get merged
     ```
 
 ```{r}
 readr::read_csv("a,b,c\n1,2\n1,2,3,4")
-
+# 3 columns and 4 values. Lat 2 get merged.
 ```
 
 ```{r}
 readr::read_csv("a,b\n\"1")
-
+# DOes not read rows due to improper syntax
 ```
 
 ```{r}
 readr::read_csv("a,b\n1,2\na,b")
-
+# Each column has a numerical and a character value, so the column type is coerced to character:
 ```
 
 ```{r}
 readr::read_csv("a;b\n1;3")
+# Delimiter ';' is not specified. Gets treated as a whole.
+# Fix -> readr::read_delim("a;b\n1;3", quote = "|")
 ```
 
 ```{r}
-readr::read_delim("a;b\n1;3")
+
 ```
 
 Practice referring to non-syntactic names in the following data frame by:
@@ -99,6 +101,7 @@ annoying <- tibble(
   `1` = 1:10,
   `2` = `1` * 2 + rnorm(length(`1`))
 )
+annoying
 ```
 
 a.  Extracting the variable called `1`.
@@ -131,4 +134,19 @@ annoying |>
     "two" = `2`,
     "three" = `3`
   )
+```
+
+```{r}
+sales_files <- c(
+  "https://pos.it/r4ds-01-sales",
+  "https://pos.it/r4ds-02-sales",
+  "https://pos.it/r4ds-03-sales"
+)
+read_csv(sales_files, id = "file")
+```
+
+```{r}
+sales_files <- c("data/r4ds-01-sales.csv", "data/r4ds-02-sales.csv", "data/r4ds-03-sales.csv")
+read_csv(sales_files, id = "file")
+
 ```
