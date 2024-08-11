@@ -1,0 +1,40 @@
+---
+title: "Variation"
+author: "Rodolfo León"
+format: html
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+#| echo: false
+suppressPackageStartupMessages(library(tidyverse))
+library(ggthemes)
+```
+
+## Variation
+
+```{r}
+diamonds |> ggplot(aes(x = carat)) + 
+  geom_histogram(binwidth = 0.5, col = 'darkgray', fill = 'cadetblue') +
+  theme_economist() +
+  scale_color_economist()
+```
+
+```{r}
+smaller<-diamonds |> filter(carat < 3)
+
+smaller |> ggplot(aes(x = carat)) +
+  geom_histogram(binwidth = 0.01, fill = "cornflowerblue") +
+  theme_economist()
+```
+
+```{r}
+ggplot(diamonds, aes(x = y)) + 
+  geom_histogram(binwidth = 0.5, fill = "lightgreen") +
+  coord_cartesian(ylim = c(0, 50)) +
+  theme_wsj()
+```

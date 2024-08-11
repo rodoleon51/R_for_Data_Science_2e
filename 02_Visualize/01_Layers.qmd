@@ -3,6 +3,8 @@ title: "Layers"
 author: "Rodolfo León"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -12,7 +14,6 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```{r}
 #| echo: false
 suppressPackageStartupMessages(library(tidyverse))
-library(ggthemes)
 ```
 
 ## Aesthetic mappings
@@ -29,16 +30,10 @@ ggplot(mpg, aes(x = displ, y = hwy, shape = class)) +
 ```
 
 ```{r}
-
-```
-
-```{r}
 # Left
 ggplot(mpg, aes(x = displ, y = hwy, size = class)) +
   geom_point()
-```
 
-```{r}
 # Right
 ggplot(mpg, aes(x = displ, y = hwy, alpha = class)) +
   geom_point()
@@ -49,18 +44,19 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(color = "blue")
 ```
 
-## Exercises
+## 9.2.1 Exercises (Solutions 10.2.1)
 
 1.  Create a scatterplot of `hwy` vs. `displ` where the points are pink filled in triangles.
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) + 
-  geom_point(color = "pink", shape = 2)
+  geom_point(color = "pink", shape = 17)
 ```
 
 2.  Why did the following code not result in a plot with blue points?
 
-    [ggplot](https://ggplot2.tidyverse.org/reference/ggplot.html)(mpg) + [geom_point](https://ggplot2.tidyverse.org/reference/geom_point.html)([aes](https://ggplot2.tidyverse.org/reference/aes.html)(x = displ, y = hwy, color = "blue"))
+    ggplot(mpg) +\
+    geom_point(aes(x = displ, y = hwy, color = "blue"))
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) +
@@ -90,44 +86,43 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 
 # Right
 ggplot(mpg, aes(x = displ, y = hwy)) + 
-  geom_smooth()
-#> `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+  geom_smooth(method = 'loess', formula = 'y ~ x')
 ```
 
 ```{r}
 # Left
 ggplot(mpg, aes(x = displ, y = hwy, shape = drv)) + 
-  geom_smooth()
+  geom_smooth(method = 'loess', formula = 'y ~ x')
 
 # Right
 ggplot(mpg, aes(x = displ, y = hwy, linetype = drv)) + 
-  geom_smooth()
+  geom_smooth(method = 'loess', formula = 'y ~ x')
 ```
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy, color = drv)) + 
   geom_point() +
-  geom_smooth(aes(linetype = drv))
+  geom_smooth(aes(linetype = drv), method = 'loess', formula = 'y ~ x')
 ```
 
 ```{r}
 # Left
 ggplot(mpg, aes(x = displ, y = hwy)) +
-  geom_smooth()
+  geom_smooth(method = 'loess', formula = 'y ~ x')
 
 # Middle
 ggplot(mpg, aes(x = displ, y = hwy)) +
-  geom_smooth(aes(group = drv))
+  geom_smooth(aes(group = drv), method = 'loess', formula = 'y ~ x')
 
 # Right
 ggplot(mpg, aes(x = displ, y = hwy)) +
-  geom_smooth(aes(color = drv), show.legend = FALSE)
+  geom_smooth(aes(color = drv), method = 'loess', formula = 'y ~ x', show.legend = FALSE)
 ```
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) + 
   geom_point(aes(color = class)) + 
-  geom_smooth()
+  geom_smooth(method = 'loess', formula = 'y ~ x')
 ```
 
 ```{r}
@@ -165,24 +160,36 @@ ggplot(mpg, aes(x = hwy, y = drv, fill = drv, color = drv)) +
 #> Picking joint bandwidth of 1.28
 ```
 
-## Exercises
+## 9.3.1 Exercises (Solutions 10.3.1)
 
 ```{r}
 
 mpg |> ggplot(aes(x = displ, y = hwy)) +
   geom_point() + 
-  geom_smooth()
+  geom_smooth(method = 'loess', formula = 'y ~ x')
 
 mpg |> ggplot(aes(x = displ, y = hwy)) +
   geom_point() +
-  geom_smooth(aes(group = drv))
+  geom_smooth(aes(group = drv), method = 'loess', formula = 'y ~ x')
 
 ```
 
 ```{r}
 mpg |> ggplot(aes(x = displ, y = hwy)) +
   geom_point(aes(color = drv)) +
-  geom_smooth(aes(group = drv))
+  geom_smooth(aes(group = drv), method = 'loess', formula = 'y ~ x')
+
+
+mpg |> ggplot(aes(x = displ, y = hwy)) +
+  geom_point(aes(color = drv)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x')
+
+```
+
+```{r}
+mpg |> ggplot(aes(x = displ, y = hwy)) +
+  geom_point(aes(color = drv)) +
+  geom_smooth(aes(linetype = drv))
 
 
 mpg |> ggplot(aes(x = displ, y = hwy)) +
@@ -191,14 +198,299 @@ mpg |> ggplot(aes(x = displ, y = hwy)) +
 
 ```
 
+## 9.4 Facets
+
 ```{r}
-mpg |> ggplot(aes(x = displ, y = hwy)) +
-  geom_point(aes(color = drv)) +
-  geom_smooth(aes(linetype = drv, ))
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  facet_wrap(~cyl)
+```
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  facet_grid(drv ~ cyl)
+```
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  facet_grid(drv ~ cyl, scales = "free")
+```
+
+## 9.4.1 Exercises (Soluciones 10.4.1)
+
+1.  What happens if you facet on a continuous variable?
+
+    *Faceting by a continuous variable results in one facet per each unique value of the continuous variable.*
+
+    ```{r}
+    ggplot(mpg, aes(x = drv, y = cyl)) + 
+      geom_point() +
+      facet_wrap(~hwy)
+    ```
+
+2.  What plots does the following code make? What does `.` do?
+
+```{r}
+# Don't facet accross columns
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy)) +
+  facet_grid(drv ~ .)
+
+# Don't facet accross rows.
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy)) +
+  facet_grid(. ~ cyl)
+```
+
+3.  Take the first faceted plot in this section:
+
+    ```         
+    ggplot(mpg) +  
+      geom_point(aes(x = displ, y = hwy)) +    
+      facet_wrap(~ cyl, nrow = 2)
+    ```
+
+    What are the advantages to using faceting instead of the color aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset?
+
+```{r}
+ggplot(mpg) +  
+  geom_point(aes(x = displ, y = hwy)) +    
+  facet_wrap(~ cyl, nrow = 2)
+```
+
+*The advantages of faceting is seeing each class of car separately, without any overplotting. The disadvantage is not being able to compare the classes to each other as easily when they’re in separate plots. Additionally, color can be helpful for easily telling classes apart. Using both can be helpful, but doesn’t mitigate the issue of easy comparison across classes.* 
+
+```{r}
+# facet
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+
+# color
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy, color = class))
+
+# both
+ggplot(mpg) + 
+  geom_point(
+    aes(x = displ, y = hwy, color = class), 
+    show.legend = FALSE) + 
+  facet_wrap(~ class, nrow = 2)
+
+# highlighting
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point(color = "gray") +
+  geom_point(
+    data = mpg |> filter(class == "compact"),
+    color = "pink"
+  )
+```
+
+6.  Which of the following plots makes it easier to compare engine size (`displ`) across cars with different drive trains? What does this say about when to place a faceting variable across rows or columns?
+
+    ```{r}
+    ggplot(mpg, aes(x = displ)) + 
+      geom_histogram(binwidth = 0.25) + 
+      facet_grid(drv ~ .)
+
+    ggplot(mpg, aes(x = displ)) + 
+      geom_histogram(binwidth = 0.25) +
+      facet_grid(. ~ drv)
+    ```
+
+*If the goal is to make comparisons based on a given variable, that variable should be placed on the shared axis.*
+
+7.  Recreate the following plot using [`facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html) instead of [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html). How do the positions of the facet labels change?
+
+*With facet_wrap the labels switch from the y axis to the x axis.*
+
+```{r}
+ggplot(mpg) +    
+  geom_point(aes(x = displ, y = hwy)) +   
+  facet_grid(drv ~ .)
 
 
-mpg |> ggplot(aes(x = displ, y = hwy)) +
-  geom_point(aes(color = drv)) +
-  geom_smooth()
+ggplot(mpg) +    
+  geom_point(aes(x = displ, y = hwy)) +   
+  facet_wrap(~drv, nrow = 3)
+```
+
+## 9.5 Statistical transformations
+
+```{r}
+ggplot(diamonds, aes(x = cut)) + 
+  geom_bar(fill = "lightgreen")
+# Default parameter for geom_bar is 'stat = "count"'
 
 ```
+
+```{r}
+diamonds |>
+  count(cut) |>
+  ggplot(aes(x = cut, y = n)) +
+  geom_bar(stat = "identity", fill = "lightblue")
+```
+
+```{r}
+ggplot(diamonds, aes(x = cut, y = after_stat(prop), group = 1)) + 
+  geom_bar(fill = "indianred")
+
+# Replace default y = count by proportion with after_stat(prop)
+```
+
+```{r}
+ggplot(diamonds) + 
+  stat_summary(
+    aes(x = cut, y = depth),
+    fun.min = min,
+    fun.max = max,
+    fun = median
+  )
+```
+
+## 9.5.1 Exercises (Solutions 10.5.1)
+
+1.  What is the default geom associated with [`stat_summary()`](https://ggplot2.tidyverse.org/reference/stat_summary.html)? How could you rewrite the previous plot to use that geom function instead of the stat function?
+
+```{r}
+#The default geom of stat summary is geom_pointrange(). The plot from the book can be recreated as follows. Replicate above plot.
+
+diamonds |>
+  group_by(cut) |>
+  summarize(
+    lower = min(depth),
+    upper = max(depth),
+    midpoint = median(depth)
+  ) |>
+  ggplot(aes(x = cut, y = midpoint)) +
+  geom_pointrange(aes(ymin = lower, ymax = upper))
+```
+
+5.  In our proportion bar chart, we needed to set `group = 1`. Why? In other words, what is the problem with these two graphs?
+
+    *In the first pair of plots, we see that setting `group = 1` results in the marginal proportions of `cut`s being plotted. In the second pair of plots, setting `group = color` results in the proportions of `color`s within each `cut` being plotted.*
+
+    ```{r}
+    diamonds |> ggplot(aes(x = cut, y = after_stat(prop))) + 
+      geom_bar()
+
+    diamonds |> ggplot(aes(x = cut, fill = color, y = after_stat(prop))) + 
+      geom_bar()
+    ```
+
+```{r}
+# two variables
+diamonds |> ggplot(aes(x = cut, fill = color, y = after_stat(prop))) + 
+  geom_bar()
+diamonds |> ggplot(aes(x = cut, fill = color, y = after_stat(prop), group = color)) +
+  geom_bar()
+```
+
+## 9.6 Position adjustments
+
+```{r}
+# Left
+ggplot(mpg, aes(x = drv, color = drv)) + 
+  geom_bar()
+
+# Right
+ggplot(mpg, aes(x = drv, fill = drv)) + 
+  geom_bar()
+```
+
+```{r}
+ggplot(mpg, aes(x = drv, fill = class)) + 
+  geom_bar()
+```
+
+```{r}
+# Left
+ggplot(mpg, aes(x = drv, fill = class)) + 
+  geom_bar(alpha = 1/5, position = "identity")
+
+# Right
+ggplot(mpg, aes(x = drv, color = class)) + 
+  geom_bar(fill = NA, position = "identity")
+```
+
+```{r}
+# Left
+ggplot(mpg, aes(x = drv, fill = class)) + 
+  geom_bar(position = "fill")
+
+# Right
+ggplot(mpg, aes(x = drv, fill = class)) + 
+  geom_bar(position = "dodge")
+```
+
+```{r}
+mpg |> ggplot(aes(x = displ, y = hwy)) + 
+  geom_point(position = "jitter")
+
+mpg |> ggplot(aes(x = displ, y = hwy)) + 
+  geom_point(position = "jitter")
+
+mpg |> ggplot(aes(x = displ, y = hwy)) + 
+  geom_jitter() #ggplot2 shorthand
+```
+
+## 9.6.1 Exercises (Solutions 10.6.1)
+
+1.  What is the problem with the following plot? How could you improve it?
+
+    *The first plot obscures the total number of points. Use 'jitter' to show more.*
+
+```{r}
+ggplot(mpg, aes(x = cty, y = hwy)) + 
+  geom_point()
+
+ggplot(mpg, aes(x = cty, y = hwy)) + 
+  geom_jitter()
+```
+
+2.  What, if anything, is the difference between the two plots? Why?
+
+    *They are identical because the default 'position' parameter is 'identity'.*
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point()
+
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(position = "identity")
+```
+
+3.  What parameters to [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) control the amount of jittering?
+
+    |                     |                                             |
+    |---------------------|---------------------------------------------|
+    | *`width`, `height`* | *Amount of vertical and horizontal jitter.* |
+
+4.  Compare and contrast [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) with [`geom_count()`](https://ggplot2.tidyverse.org/reference/geom_count.html).
+
+    [*`geom_jitter()`*](https://ggplot2.tidyverse.org/reference/geom_jitter.html) *adds random noise to the location of the points to avoid overplotting.*
+
+    [*`geom_count()`*](https://ggplot2.tidyverse.org/reference/geom_count.html) *sizes the points based on the number of observations at a given location.*
+
+    ```{r}
+    ggplot(mpg, aes(x = displ, y = hwy)) +
+      geom_jitter(col = 'blue')
+
+    ggplot(mpg, aes(x = displ, y = hwy)) +
+      geom_count(col = 'green')
+    ```
+
+5.  What’s the default position adjustment for [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)? Create a visualization of the `mpg` dataset that demonstrates it.
+
+    *The default 'position' for [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) is `"dodge2"`.*
+
+    ```{r}
+    ggplot(mpg, aes(x = cty, y = displ)) +
+      geom_boxplot()
+
+    ggplot(mpg, aes(x = cty, y = displ)) +
+      geom_boxplot(position = "dodge2")
+
+    ```

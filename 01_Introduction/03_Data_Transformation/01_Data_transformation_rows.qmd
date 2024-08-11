@@ -8,11 +8,10 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
 ```{r}
-#| echo: false
 library(tidyverse)
 library(ggthemes)
 ```
@@ -25,6 +24,8 @@ library(nycflights13)
 View(flights)
 ```
 
+## 1. dplyr basics
+
 ```{r}
 # Flights with a given destination
 flights |>
@@ -35,7 +36,9 @@ flights |>
   )
 ```
 
-### Rows - filter()
+## 2. Rows 
+
+### 2.1 filter()
 
 ```{r}
 # Filtering rows does not affect columns
@@ -46,7 +49,6 @@ flights %>% filter(dep_delay > 120)
 # Flights that departed on January 1
 flights |> 
   filter(month == 1 & day == 1)
-
 ```
 
 ```{r}
@@ -62,15 +64,21 @@ flights |>
   filter(month %in% c(1, 2))
 ```
 
-### Rows - arrange()
+### 2.2 arrange()
 
 ```{r}
-# Sort the order of the rows for the whole dataframe. Use arrange(desc()) for descending order
+# Sort the order of the rows for the whole dataframe. 
 flights |> 
   arrange(year, month, day, dep_time)
 ```
 
-### Rows - distinct()
+```{r}
+# Use arrange(desc()) for descending order
+flights |> 
+  arrange(desc(dep_delay))
+```
+
+### 2.3 distinct()
 
 ```{r}
 # Remove duplicate rows, if any
